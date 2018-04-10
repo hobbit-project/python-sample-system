@@ -1,3 +1,4 @@
+from main.BenchmarkNotifier import BenchmarkNotifier
 from main.SystemAdapter import SystemAdapter
 
 containerTerminatedCommand = b'\x00\x00\x00\tsession_1\x10\x00\x00\x00\x16dummybenchmark/datagen\x00'
@@ -14,4 +15,7 @@ adapter = SystemAdapter()
 
 adapter.init()
 adapter.run()
-test="123"
+
+notifier = BenchmarkNotifier("dummybenchmark/system-adapter")
+notifier.init()
+notifier.run()

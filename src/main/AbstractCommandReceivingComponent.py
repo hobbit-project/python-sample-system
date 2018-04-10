@@ -1,14 +1,9 @@
 import io
-from abc import abstractmethod
 
 import bitstring
 import pika
 
 from main import RabbitMQUtils
-
-SYSTEM_READY_SIGNAL = 1
-TASK_GENERATION_FINISHED = 15
-DOCKER_CONTAINER_TERMINATED = 16
 
 class AbstractCommandReceivingComponent:
     connection = None
@@ -26,18 +21,12 @@ class AbstractCommandReceivingComponent:
 
     commandQueue = None
 
-    def __init__(self):
-        test="123"
-
     def init(self):
-        parameters = pika.ConnectionParameters(host='192.168.56.20')
+        parameters = pika.ConnectionParameters(host='rabbit')
         self.connection = pika.SelectConnection(parameters, self.on_connection_open)
 
     def on_connection_open(self, connection):
         self.commandChannel = connection.channel(self.on_command_channel_open)
-        self.dataGenChannel = connection.channel(self.on_dataGen_channel_open)
-        self.taskGenChannel = connection.channel(self.on_taskGen_channel_open)
-        self.evalStorageChannel = connection.channel(self.on_evalStorage_channel_open)
 
     def on_command_channel_open(self, channel):
         channel.exchange_declare(exchange=self.commandExchangeName, exchange_type="fanout", callback=self.on_command_exchange_declared, durable=False, auto_delete=True)
@@ -55,25 +44,19 @@ class AbstractCommandReceivingComponent:
 
     def on_channels_ready(self, channel):
         self.readyChannels+=1
-        if self.readyChannels==4:
-            print("Sending SYSTEM_READY_SIGNAL signal")
-            self.sendCmdToQueue(SYSTEM_READY_SIGNAL, None)
-        # if self.readyChannels > 4:
-        #     for data in self.delayedSend:
-        #         self.evalStorageChannel.basic_publish(exchange="", routing_key=self.evalStorageQueueName, body=data)
 
     def sendCmdToQueue(self, command: bytes, data: bytes):
 
-        attachData = None
-        if data is not None and len(data) > 0:
-            attachData = True
+        # attachData = None
+        # if data is not None and len(data) > 0:
+        #     attachData = True
 
         stream = bitstring.BitStream()
         stream.append("int:32=" + str(len(self.sessionId)))
         stream.append(bytearray(self.sessionId, encoding="utf-8"))
         stream.append("int:8=" + str(command))
 
-        if attachData is not None:
+        if data is not None:
             stream.append(data)
 
         self.commandChannel.basic_publish(exchange=self.commandExchangeName, routing_key="", body=stream.bytes)
@@ -82,11 +65,8 @@ class AbstractCommandReceivingComponent:
         buffer = io.BytesIO(body)
         sessionId = RabbitMQUtils.readString(buffer)
         command = RabbitMQUtils.readInt(buffer)
-        print(" [x] Command received %r" % command)
-
-        if command==TASK_GENERATION_FINISHED:
-            self.sendCmdToQueue()
-            self.terminate()
+        #print(" [x] Command received %r" % command)
+        return command
 
     def run(self):
         try:
