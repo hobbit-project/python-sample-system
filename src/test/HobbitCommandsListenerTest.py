@@ -1,5 +1,4 @@
-from main.BenchmarkNotifier import BenchmarkNotifier
-from main.SystemAdapter import SystemAdapter
+from main.supplementary.HobbitCommandsListener import HobbitCommandsListener
 
 containerTerminatedCommand = b'\x00\x00\x00\tsession_1\x10\x00\x00\x00\x16dummybenchmark/datagen\x00'
 systemReadyCommand = b'\x00\x00\x00\tsession_1\x01'
@@ -9,13 +8,5 @@ taskGeneratorStartCommand=b'\x00\x00\x00\tsession_1\x08'
 
 taskCommand=b'\x00\x00\x00\x010\x00\x00\x00\rtask_0_data_1'
 
-adapter = SystemAdapter()
-#adapter.commandReceivedCallback(None,None,None, systemReadyCommand)
-#adapter.taskGenCallback(None,None,None, taskCommand)
-
-adapter.init()
-adapter.run()
-
-notifier = BenchmarkNotifier("dummybenchmark/system-adapter")
-notifier.init()
-notifier.run()
+commandsListener = HobbitCommandsListener(None, "dummybenchmark/system-adapter")
+commandsListener.commandReceivedCallback(None, None, None, containerStartCommand)

@@ -1,11 +1,11 @@
 import io
+import os
 from abc import abstractmethod
 
 import bitstring
-import pika
 
-from main import RabbitMQUtils
-from main.AbstractCommandReceivingComponent import AbstractCommandReceivingComponent
+from main.supplementary import RabbitMQUtils
+from main.supplementary.AbstractCommandReceivingComponent import AbstractCommandReceivingComponent
 
 SYSTEM_READY_SIGNAL = 1
 TASK_GENERATION_FINISHED = 15
@@ -21,16 +21,18 @@ class AbstractSystemAdapter(AbstractCommandReceivingComponent):
 
     commandExchangeName = 'hobbit.command'
 
-    sessionId = 'session_4'
-    #sessionIdB = b"session_1"
-
     commandQueue = None
-    dataGenQueueName = 'hobbit.datagen-system.' + sessionId
-    taskGenQueueName = 'hobbit.taskgen-system.' + sessionId
-    evalStorageQueueName = 'hobbit.system-evalstore.' + sessionId
+    dataGenQueueName = None
+    taskGenQueueName = None
+    evalStorageQueueName = None
+    systemParamModel = None
 
     def init(self):
         super().init()
+        self.dataGenQueueName = 'hobbit.datagen-system.' + self.sessionId
+        self.taskGenQueueName = 'hobbit.taskgen-system.' + self.sessionId
+        self.evalStorageQueueName = 'hobbit.system-evalstore.' + self.sessionId
+        self.systemParamModel = os.environ["SYSTEM_PARAMETERS_MODEL"]
 
     def on_connection_open(self, connection):
         super().on_connection_open(connection)
