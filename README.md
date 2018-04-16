@@ -5,7 +5,7 @@ The actions below will allow you to run a target benchmark locally and you may d
 
 The [standard dockerfile-based image building procedure](https://github.com/hobbit-project/platform/wiki/Upload-a-system) will be required to upload a python system into the online platform. 
 
-# Debugging under a target benchmark
+# Local debugging under a target benchmark
 
 1. Clone the target benchmark repository (e.g. [DEBS-GC-2018](https://github.com/hobbit-project/DEBS-GC-2018)) as well as this one. The benchmark should be runnable locally (contain [SDK-based](https://github.com/hobbit-project/java-sdk-example) tests).
 2. Make sure that `checkHealth()` from the `DEBS-GC-2018` executes without errors (see instructions in [Readme](https://github.com/hobbit-project/DEBS-GC-2018)). 
