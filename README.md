@@ -1,7 +1,7 @@
 # python-sample-system
 A sample python-based implementation of system adapter.
 
-The actions below will allow you to run a target benchmark locally and you may debug your system fully the same way, as it is executed in the online platform. But you may test/debug your system without running benchmark if find the procedure too complicated.
+The actions below will allow you to run a target benchmark locally and you may debug your system fully the same way, as it is executed in the online platform. You may test/debug your system without running benchmark if find the procedure too complicated.
 
 The [standard dockerfile-based image building procedure](https://github.com/hobbit-project/platform/wiki/Upload-a-system) will be required to upload a python system into the online platform. 
 
