@@ -7,9 +7,9 @@ The [standard dockerfile-based image building procedure](https://github.com/hobb
 
 # Local debugging under a target benchmark
 
-1. Clone the target benchmark repository (e.g. [DEBS-GC-2018](https://github.com/hobbit-project/DEBS-GC-2018)) as well as this one. The benchmark should be runnable locally (contain [SDK-based](https://github.com/hobbit-project/java-sdk-example) tests).
-2. Make sure that `checkHealth()` from the `DEBS-GC-2018` executes without errors (see instructions in [Readme](https://github.com/hobbit-project/DEBS-GC-2018)). 
-3. Comment the submission of java-based sample system (line ` .systemAdapter(systemAdapter)` in [SampleSystemTestRunner.java](https://github.com/hobbit-project/DEBS-GC-2018/blob/master/src/main/java/org/hobbit/debs_2018_gc_samples/System/SampleSystemTestRunner.java)) and make sure, that `check_health()` test is not finishing anymore (hangs up after taskGenetator ready signal or something like that. This means waiting of system Adapter, which you excluded from the execution by commenting the line.
-4. Package the java code (`mvn package -DskipTests=true`).
-5. Open python code and modify the paths to jar file in [SystemAdapterTest.py](https://github.com/hobbit-project/python-sample-system/blob/master/src/test/SystemAdapterTest.py). You may also modify the name of the future docker image of your system.
+1. Clone the target sdk-based benchmark repository (e.g. [DEBS-GC-2018](https://github.com/hobbit-project/DEBS-GC-2018)) as well as this one. The benchmark should be runnable locally (contain [SDK-based](https://github.com/hobbit-project/java-sdk-example) tests).
+2. Make sure that `checkHealth()` from the target benchmark (`DEBS-GC-2018`) executes without errors (see instructions in [Readme](https://github.com/hobbit-project/DEBS-GC-2018)). 
+3. Comment the submission of java-based sample system (line ` .systemAdapter(systemAdapter)` in [SampleSystemTestRunner.java](https://github.com/hobbit-project/DEBS-GC-2018/blob/master/src/main/java/org/hobbit/debs_2018_gc_samples/System/SampleSystemTestRunner.java)) and make sure, that `check_health()` test is not finishing anymore (hangs up after taskGenetator ready signal or something like that. This means that SDK is waiting for a System Adapter, which you excluded from the execution by commenting the line.
+4. Package the java code of the benchmark to make it executable as jar (`mvn package -DskipTests=true`).
+5. Open python the [SystemAdapterTest.py](https://github.com/hobbit-project/python-sample-system/blob/master/src/test/SystemAdapterTest.py) and modify the path to jar file you have just packages. You may also modify the name of the future docker image of your system.
 6. Run the SystemAdapterTest.py from your IDE (running under sudo probably might be requred) and you may debug it.
